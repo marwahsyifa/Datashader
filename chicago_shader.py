@@ -22,6 +22,39 @@ print(dff.shape)
 fig = px.scatter_mapbox(dff[:1], lat='Latitude', lon='Longitude', zoom=10)
 
 
+# Build an abstract canvas representing the space in which to plot data
+cvs = ds.Canvas(plot_width=4000, plot_height=4000)
+
+# project the longitude and latitude onto the canvas and
+# map the data to pixels as points
+aggs = cvs.points(dff, x='Longitude', y='Latitude')
+coords_lat, coords_lon = aggs.coords['Latitude'].values, aggs.coords['Longitude'].values
+
+# Set the corners of the image that need to be passed to the mapbox
+
+coordinates = [[coords_lon[0], coords_lat[0]],
+               [coords_lon[-1], coords_lat[0]],
+               [coords_lon[-1], coords_lat[-1]],
+               [coords_lon[0], coords_lat[-1]]]
+
+
+# Set the image color, and the legend (how) types
+# linear (how=linear), logarithmic (how=log), percentile (how=eq_hist)
+img = tf.shade(aggs, cmap=kbc, how='eq_hist', alpha=255)[::-1].to_pil()
+
+
+# Add the datashader image as a mapbox layer image
+fig.update_layout(mapbox_style="carto-darkmatter",
+                  mapbox_layers=[
+                      {
+                          "sourcetype": "image",
+                          "source": img,
+                          "coordinates": coordinates
+                      }
+                  ]
+                  )
+
+
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
@@ -65,36 +98,5 @@ app.layout = dbc.Container([
         ], width=12)
     ])
 ])
-# Build an abstract canvas representing the space in which to plot data
-cvs = ds.Canvas(plot_width=4000, plot_height=4000)
-
-# project the longitude and latitude onto the canvas and
-# map the data to pixels as points
-aggs = cvs.points(dff, x='Longitude', y='Latitude')
-coords_lat, coords_lon = aggs.coords['Latitude'].values, aggs.coords['Longitude'].values
-
-# Set the corners of the image that need to be passed to the mapbox
-
-coordinates = [[coords_lon[0], coords_lat[0]],
-               [coords_lon[-1], coords_lat[0]],
-               [coords_lon[-1], coords_lat[-1]],
-               [coords_lon[0], coords_lat[-1]]]
-
-
-# Set the image color, and the legend (how) types
-# linear (how=linear), logarithmic (how=log), percentile (how=eq_hist)
-img = tf.shade(aggs, cmap=kbc, how='eq_hist', alpha=255)[::-1].to_pil()
-
-
-# Add the datashader image as a mapbox layer image
-fig.update_layout(mapbox_style="carto-darkmatter",
-                  mapbox_layers=[
-                      {
-                          "sourcetype": "image",
-                          "source": img,
-                          "coordinates": coordinates
-                      }
-                  ]
-                  )
 if __name__ == "__main__":
     app.run_server(port=5000, host='localhost', debug=True)
