@@ -28,7 +28,7 @@ app.layout = dbc.Container([
             html.H1("Data Kasus Perampokan di Kota Chicago",
                     style={'textAlign': 'center'}),
             html.A(
-                "Data ini di ambil dari Chicago Data Portal yang menyajikan 87 juta laporan kasus kejahatan di kota Chicago dari tahun 2001 - 2022. Beberapa kasus yang telah dilaporkan diantaranya: perampokan; pencurian; penyerangan; prostitusi; dan narkotika. Halaman ini menampilkan visualisasi data kasus perampokan yang terjadi di kota Chicago berbentuk peta beserta titik koordinat kejadian, sehingga dapat menjadi pengetahuan bagi semua orang untuk berhati-hati ketika berada dalam daerah-daerah rawan tersebut.", style={'textAlign': 'center'})
+                "Data ini di ambil dari Chicago Data Portal yang menyajikan 24 juta laporan kasus kejahatan di kota Chicago dari tahun 2001 - 2022. Beberapa kasus yang telah dilaporkan diantaranya: perampokan; pencurian; penyerangan; prostitusi; dan narkotika. Halaman ini menampilkan visualisasi data kasus perampokan yang terjadi di kota Chicago berbentuk peta beserta titik koordinat kejadian, sehingga dapat menjadi pengetahuan bagi semua orang untuk berhati-hati ketika berada dalam daerah-daerah rawan tersebut.", style={'textAlign': 'center'})
         ], width=12)
     ]),
     dbc.Row([
